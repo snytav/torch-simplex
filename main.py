@@ -148,7 +148,15 @@ def Simplex(A, b, c):
         cbT_t[ratioMinIndx_t] = tmp2
         # switch global index tracker indices
         cindx[cnMinIndx], cindx[ratioMinIndx + nonbasicSize] = cindx[ratioMinIndx + nonbasicSize], cindx[cnMinIndx]
-        cindx_t[cnMinIndx_t], cindx_t[ratioMinIndx_t + nonbasicSize] = cindx_t[ratioMinIndx_t + nonbasicSize], cindx_t[cnMinIndx_t]
+
+
+        ###################################
+        cindx_t = torch.tensor(cindx_t)
+        tmp1 = torch.clone(cindx_t[ratioMinIndx_t + nonbasicSize]),
+        tmp2 = torch.clone(cindx_t[cnMinIndx_t])
+
+        cindx_t[cnMinIndx_t] = tmp1[0]
+        cindx_t[ratioMinIndx_t + nonbasicSize] = tmp2
 
         # now repeat the loop
 
