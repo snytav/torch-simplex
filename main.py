@@ -104,20 +104,25 @@ def Simplex(A, b, c):
             # values in bHat are the final solution values for each of the corresponding variables
             # ie value 0 in dbIndx corresponds with first variable, so whatever the index for the 0 is
             # is the index in bHat that has the solution value for that variable.
-            return cbT, cbIndx, cnT, cnIndx, bHat, cnHat
+            return cbT_t, cbIndx_t, cnT_t, cnIndx_t, bHat_t, cnHat_t
 
         # this is the index for the column of coeffs in a for the given variable
         indx = cindx[cnMinIndx]
+        indx_t = cindx_t[cnMinIndx_t]
 
-        Ahat = Binv @ A[:, indx]
+        Ahat   = Binv @ A[:, indx]
+        Ahat_t = torch.matmul(Binv_t,At[:, indx_t].double())
 
         # now we want to iterate through Ahat and bHat and pick the minimum ratios
         # only take ratios of variables with Ahat_i values greater than 0
         # pick smallest ratio to get variable that will become nonbasic.
-        ratios = []
+        ratios   = []
+        ratios_t = []
         for i in range(0, len(bHat)):
             Aval = Ahat[i]
             Bval = bHat[i]
+            Aval_t = Ahat_t[i]
+            Bval_t   = bHat_t[i]
 
             # don't look at ratios with val less then or eqaul to 0, append to keep index
             if(Aval <= 0):
@@ -125,12 +130,26 @@ def Simplex(A, b, c):
                 continue
             ratios.append(Bval / Aval)
 
+            if (Aval_t <= 0):
+                ratios.append(10000000)
+                continue
+            ratios_t.append(Bval_t / Aval_t)
+
         ratioMinIndx = np.argmin(ratios)
+        ratios_t = torch.tensor(ratios_t)
+        ratioMinIndx_t = torch.argmin(ratios_t)
 
         #switch basic and nonbasic variables using the indices.
         cnT[cnMinIndx], cbT[ratioMinIndx] = cbT[ratioMinIndx], cnT[cnMinIndx]
+
+        tmp1                  = torch.clone(cbT_t[ratioMinIndx_t])
+        tmp2                  = torch.clone(cnT_t[cnMinIndx_t])
+        cnT_t[cnMinIndx_t]    = tmp1
+        cbT_t[ratioMinIndx_t] = tmp2
         # switch global index tracker indices
         cindx[cnMinIndx], cindx[ratioMinIndx + nonbasicSize] = cindx[ratioMinIndx + nonbasicSize], cindx[cnMinIndx]
+        cindx_t[cnMinIndx_t], cindx_t[ratioMinIndx_t + nonbasicSize] = cindx_t[ratioMinIndx_t + nonbasicSize], cindx_t[cnMinIndx_t]
+
         # now repeat the loop
 
 
