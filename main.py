@@ -99,6 +99,7 @@ def Simplex(A, b, c):
 
 
         # break out of loop, returning values if all values of cnhat are above 0
+        # for Torch: (cnHat_t >0).all()
         if(all(i>=0 for i in cnHat)):
             # use cbIndx to get index values of variables in bHat, and the corresponding index
             # values in bHat are the final solution values for each of the corresponding variables
