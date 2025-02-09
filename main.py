@@ -126,14 +126,11 @@ def Simplex(A, b, c):
             Bval_t   = bHat_t[i]
 
             # don't look at ratios with val less then or eqaul to 0, append to keep index
-            if(Aval <= 0):
+            if Aval <= 0 or Aval_t <= 0:
                 ratios.append(10000000)
+                ratios_t.append(10000000)
                 continue
             ratios.append(Bval / Aval)
-
-            if (Aval_t <= 0):
-                ratios.append(10000000)
-                continue
             ratios_t.append(Bval_t / Aval_t)
 
         ratioMinIndx = np.argmin(ratios)
