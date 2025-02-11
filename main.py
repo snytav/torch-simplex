@@ -137,6 +137,7 @@ def Simplex(A, b, c):
         ratios_t = torch.tensor(ratios_t)
         ratioMinIndx_t = torch.argmin(ratios_t)
 
+        print('cnT,cnT_t,cbT,cbT_t ',cnT,cnT_t,cbT,cbT_t)
         #switch basic and nonbasic variables using the indices.
         cnT[cnMinIndx], cbT[ratioMinIndx] = cbT[ratioMinIndx], cnT[cnMinIndx]
 
@@ -155,7 +156,8 @@ def Simplex(A, b, c):
 
         cindx_t[cnMinIndx_t] = tmp1[0]
         cindx_t[ratioMinIndx_t + nonbasicSize] = tmp2
-
+        print('cnT,cnT_t,cindx,cindx_t ',cnT,cnT_t,cindx,cindx_t)
+        qq = 0
         # now repeat the loop
 
 
