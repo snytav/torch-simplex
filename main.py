@@ -62,6 +62,7 @@ def Simplex(A, b, c):
     cnT = np.array(c[:nonbasicSize])
     cnT_t = torch.tensor(ct[:nonbasicSize])
     # run core simplex method until reach the optimal solution
+    num = 0
     while True:
 
         # keep track of current indices of basic and non-basic variables
@@ -69,7 +70,7 @@ def Simplex(A, b, c):
         cnIndx = cindx[:nonbasicSize]
         cbIndx_t = cindx_t[nonbasicSize:]
         cnIndx_t = cindx_t[:nonbasicSize]
-
+        print('cnT,cnT_t,cindx,cindx_t ',num, cnT, cnT_t, cindx, cindx_t)
 
         # basis matrix
         B = A[:, cbIndx]
@@ -105,7 +106,7 @@ def Simplex(A, b, c):
             # values in bHat are the final solution values for each of the corresponding variables
             # ie value 0 in dbIndx corresponds with first variable, so whatever the index for the 0 is
             # is the index in bHat that has the solution value for that variable.
-            return cbT_t, cbIndx_t, cnT_t, cnIndx_t, bHat_t, cnHat_t
+            return cbT, cbIndx, cnT, cnIndx, bHat, cnHat,cbT_t, cbIndx_t, cnT_t, cnIndx_t, bHat_t, cnHat_t
 
         # this is the index for the column of coeffs in a for the given variable
         indx = cindx[cnMinIndx]
@@ -156,12 +157,13 @@ def Simplex(A, b, c):
 
         cindx_t[cnMinIndx_t] = tmp1[0]
         cindx_t[ratioMinIndx_t + nonbasicSize] = tmp2
-        print('cnT,cnT_t,cindx,cindx_t ',cnT,cnT_t,cindx,cindx_t)
+        print('cnT,cnT_t,cindx,cindx_t ',num,cnT,cnT_t,cindx,cindx_t)
+        num = num + 1
         qq = 0
         # now repeat the loop
 
 
-Simplex(A, b, c)
+cbT, cbIndx, cnT, cnIndx, bHat, cnHat, cbT_t, cbIndx_t, cnT_t, cnIndx_t, bHat_t, cnHat_t = Simplex(A, b, c)
 
 """In the following we proceed to test the function with different constrained optimization problems."""
 
