@@ -28,11 +28,9 @@ b = np.array([2, 7, 3])
 
 c = np.array([-1, -2, 0, 0, 0])
 
-At = torch.from_numpy(A)
-bt = torch.from_numpy(b)
-ct = torch.from_numpy(c)
 
-len(ct)
+
+
 
 """Now, we continue to establish the function ``Simplex`` that solves a linear constrained optimization problem using a matrix method implementation of the Simplex Algorithm."""
 
@@ -44,6 +42,9 @@ def Simplex(A, b, c):
     cnT, cnIndex is final nonbasic variable values and indices
     bHat is final solution values,
     cnHat is optimality condition'''
+    At = torch.from_numpy(A)
+    bt = torch.from_numpy(b)
+    ct = torch.from_numpy(c)
 
     #sizes of basic and nonbasic vectors
     basicSize = A.shape[0] # number of constraints, m
@@ -163,10 +164,18 @@ def Simplex(A, b, c):
         qq = 0
         # now repeat the loop
 
+Ai = np.array([[6, 3, 1, 4],
+       [2, 4, 5, 1],
+       [1, 2, 4, 3]])
 
-cbT, cbIndx, cnT, cnIndx, bHat, cnHat, cbT_t, cbIndx_t, cnT_t, cnIndx_t, bHat_t, cnHat_t = Simplex(A, b, c)
-d = np.max(np.abs(cnIndx-cnIndx_t.numpy()))
-print('differerence in cnIndx ',d)
+bi = np.array([252, 144,  80])
+
+ci = np.array([48, 33, 16, 22])
+
+cbT, cbIndx, cnT, cnIndx, bHat, cnHat, cbT_t, cbIndx_t, cnT_t, cnIndx_t, bHat_t, cnHat_t = Simplex(Ai, bi, ci)
+d_cnIndx = np.max(np.abs(cnIndx-cnIndx_t.numpy()))
+d_bHat   = np.max(np.abs(bHat-bHat_t.numpy()))
+print('differerence in cnIndx, bHat ',d_cnIndx,d_bHat)
 
 """In the following we proceed to test the function with different constrained optimization problems."""
 
