@@ -42,9 +42,21 @@ def Simplex(A, b, c):
     cnT, cnIndex is final nonbasic variable values and indices
     bHat is final solution values,
     cnHat is optimality condition'''
+
+
     At = torch.from_numpy(A)
     bt = torch.from_numpy(b)
     ct = torch.from_numpy(c)
+
+
+    if torch.cuda.is_available():
+        dev = "cuda:0"
+    else:
+        dev = "cpu"
+    device = torch.device(dev)
+    At = At.to(device)
+    bt = bt.to(device)
+    ct = ct.to(device)
 
     #sizes of basic and nonbasic vectors
     basicSize = A.shape[0] # number of constraints, m
@@ -57,7 +69,7 @@ def Simplex(A, b, c):
 
     #basic variable coefficients
     cbT    = np.array(c[nonbasicSize:])
-    cbT_t  = torch.tensor(c[nonbasicSize:])
+    cbT_t  = torch.tensor(ct[nonbasicSize:])
 
     #nonbasic variable coefficients
     cnT = np.array(c[:nonbasicSize])
