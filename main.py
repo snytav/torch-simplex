@@ -172,7 +172,12 @@ bi = np.array([252, 144,  80])
 
 ci = np.array([48, 33, 16, 22])
 
-cbT, cbIndx, cnT, cnIndx, bHat, cnHat, cbT_t, cbIndx_t, cnT_t, cnIndx_t, bHat_t, cnHat_t = Simplex(Ai, bi, ci)
+N,M = A.shape
+As = np.abs(np.random.random((N,M)))
+bs = np.abs(np.random.random(N))
+cs = np.abs(np.random.random(M))
+
+cbT, cbIndx, cnT, cnIndx, bHat, cnHat, cbT_t, cbIndx_t, cnT_t, cnIndx_t, bHat_t, cnHat_t = Simplex(As, bs, cs)
 d_cnIndx = np.max(np.abs(cnIndx-cnIndx_t.numpy()))
 d_bHat   = np.max(np.abs(bHat-bHat_t.numpy()))
 print('differerence in cnIndx, bHat ',d_cnIndx,d_bHat)
