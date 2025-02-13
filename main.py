@@ -65,6 +65,7 @@ def Simplex(A, b, c):
     num = 0
     while True:
 
+        print('iteration +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ',num)
         # keep track of current indices of basic and non-basic variables
         cbIndx = cindx[nonbasicSize:]
         cnIndx = cindx[:nonbasicSize]
@@ -164,6 +165,8 @@ def Simplex(A, b, c):
 
 
 cbT, cbIndx, cnT, cnIndx, bHat, cnHat, cbT_t, cbIndx_t, cnT_t, cnIndx_t, bHat_t, cnHat_t = Simplex(A, b, c)
+d = np.max(np.abs(cnIndx-cnIndx_t.numpy()))
+print('differerence in cnIndx ',d)
 
 """In the following we proceed to test the function with different constrained optimization problems."""
 
