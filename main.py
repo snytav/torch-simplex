@@ -185,8 +185,8 @@ bi = np.array([252, 144,  80])
 ci = np.array([48, 33, 16, 22])
 
 N,M = A.shape
-N = 5
-M = 100
+N = 50
+M = 1000
 As = np.abs(np.random.random((N,M)))
 bs = np.abs(np.random.random(N))
 cs = np.abs(np.random.random(M))
