@@ -186,13 +186,14 @@ ci = np.array([48, 33, 16, 22])
 
 N,M = A.shape
 N = 5
-M = 10
+M = 100
 As = np.abs(np.random.random((N,M)))
 bs = np.abs(np.random.random(N))
 cs = np.abs(np.random.random(M))
 
 cbT, cbIndx, cnT, cnIndx, bHat, cnHat, cbT_t, cbIndx_t, cnT_t, cnIndx_t, bHat_t, cnHat_t = Simplex(As, bs, cs)
 d_cnIndx = np.max(np.abs(cnIndx-cnIndx_t.numpy()))
+bHat_t = bHat_t.to('cpu')
 d_bHat   = np.max(np.abs(bHat-bHat_t.numpy()))
 print('differerence in cnIndx, bHat ',d_cnIndx,d_bHat)
 
