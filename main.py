@@ -69,24 +69,27 @@ def Simplex(A, b, c):
 
     #basic variable coefficients
     cbT    = np.array(c[nonbasicSize:])
-    cbT_t  = torch.tensor(ct[nonbasicSize:])
+    #cbT_t  = torch.tensor(ct[nonbasicSize:])
+    cbT_t  = ct[nonbasicSize:].clone() 
 
     #nonbasic variable coefficients
     cnT = np.array(c[:nonbasicSize])
-    cnT_t = torch.tensor(ct[:nonbasicSize])
+    #cnT_t = torch.tensor(ct[:nonbasicSize])
+    cnT_t = ct[:nonbasicSize].clone()
     # run core simplex method until reach the optimal solution
     num = 0
     while True:
 
-        print('iteration +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ',num)
+        #print('iteration +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ ',num)
         # keep track of current indices of basic and non-basic variables
         cbIndx = cindx[nonbasicSize:]
         cnIndx = cindx[:nonbasicSize]
         cbIndx_t = cindx_t[nonbasicSize:]
         cnIndx_t = cindx_t[:nonbasicSize]
-        print('cnT,cnT_t,cindx,cindx_t ',num, cnT, cnT_t, cindx, cindx_t)
+        #print('cnT,cnT_t,cindx,cindx_t ',num, cnT, cnT_t, cindx, cindx_t)
 
-        # basis matrix
+        #/
+        #basis matrix
         B = A[:, cbIndx]
         Bt = At[:, cbIndx_t]
 
@@ -152,7 +155,7 @@ def Simplex(A, b, c):
         ratios_t = torch.tensor(ratios_t)
         ratioMinIndx_t = torch.argmin(ratios_t)
 
-        print('cnT,cnT_t,cbT,cbT_t ',cnT,cnT_t,cbT,cbT_t)
+        #print('cnT,cnT_t,cbT,cbT_t ',cnT,cnT_t,cbT,cbT_t)
         #switch basic and nonbasic variables using the indices.
         cnT[cnMinIndx], cbT[ratioMinIndx] = cbT[ratioMinIndx], cnT[cnMinIndx]
 
@@ -171,7 +174,7 @@ def Simplex(A, b, c):
 
         cindx_t[cnMinIndx_t] = tmp1[0]
         cindx_t[ratioMinIndx_t + nonbasicSize] = tmp2
-        print('cnT,cnT_t,cindx,cindx_t ',num,cnT,cnT_t,cindx,cindx_t)
+        #print('cnT,cnT_t,cindx,cindx_t ',num,cnT,cnT_t,cindx,cindx_t)
         num = num + 1
         qq = 0
         # now repeat the loop
@@ -185,8 +188,8 @@ bi = np.array([252, 144,  80])
 ci = np.array([48, 33, 16, 22])
 
 N,M = A.shape
-N = 50
-M = 1000
+N = 5
+M = 100
 As = np.abs(np.random.random((N,M)))
 bs = np.abs(np.random.random(N))
 cs = np.abs(np.random.random(M))
