@@ -169,6 +169,7 @@ def Simplex(A, b, c):
 
         ###################################
         cindx_t = torch.tensor(cindx_t)
+
         tmp1 = torch.clone(cindx_t[ratioMinIndx_t + nonbasicSize]),
         tmp2 = torch.clone(cindx_t[cnMinIndx_t])
 
@@ -187,38 +188,44 @@ bi = np.array([252, 144,  80])
 
 ci = np.array([48, 33, 16, 22])
 
-N,M = A.shape
-N = 5
-M = 100
-As = np.abs(np.random.random((N,M)))
-bs = np.abs(np.random.random(N))
-cs = np.abs(np.random.random(M))
 
-cbT, cbIndx, cnT, cnIndx, bHat, cnHat, cbT_t, cbIndx_t, cnT_t, cnIndx_t, bHat_t, cnHat_t = Simplex(As, bs, cs)
-d_cnIndx = np.max(np.abs(cnIndx-cnIndx_t.numpy()))
-bHat_t = bHat_t.to('cpu')
-d_bHat   = np.max(np.abs(bHat-bHat_t.numpy()))
-print('differerence in cnIndx, bHat ',d_cnIndx,d_bHat)
+def simplex_launcher():
+    N,M = A.shape
+    N = 5
+    M = 100
+    As = np.abs(np.random.random((N,M)))
+    bs = np.abs(np.random.random(N))
+    cs = np.abs(np.random.random(M))
+
+    cbT, cbIndx, cnT, cnIndx, bHat, cnHat, cbT_t, cbIndx_t, cnT_t, cnIndx_t, bHat_t, cnHat_t = Simplex(As, bs, cs)
+    d_cnIndx = np.max(np.abs(cnIndx-cnIndx_t.numpy()))
+    bHat_t = bHat_t.to('cpu')
+    d_bHat   = np.max(np.abs(bHat-bHat_t.numpy()))
+    print('differerence in cnIndx, bHat ',d_cnIndx,d_bHat)
 
 """In the following we proceed to test the function with different constrained optimization problems."""
 
-# example test
-A = np.array([[2, 1, 1, 0, 0],
-             [2, 3, 0, 1, 0],
-             [3, 1, 0, 0, 1]])
-c = np.array([-3, -2, 0, 0, 0])
-b = np.array([18, 42, 24])
-
-Simplex(A, b, c)
-
-# another example test
-A = np.array([[1, 1, 1, 1, 0, 0],
-            [-1, 2, -2, 0, 1, 0],
-            [2, 1, 0, 0, 0, 1]])
-
-b = np.array([4, 6, 5])
-c = np.array([-1, -2, 1, 0, 0, 0])
-
-Simplex(A, b, c)
+# # example test
+# A = np.array([[2, 1, 1, 0, 0],
+#              [2, 3, 0, 1, 0],
+#              [3, 1, 0, 0, 1]])
+# c = np.array([-3, -2, 0, 0, 0])
+# b = np.array([18, 42, 24])
+#
+# Simplex(A, b, c)
+#
+# # another example test
+# A = np.array([[1, 1, 1, 1, 0, 0],
+#             [-1, 2, -2, 0, 1, 0],
+#             [2, 1, 0, 0, 0, 1]])
+#
+# b = np.array([4, 6, 5])
+# c = np.array([-1, -2, 1, 0, 0, 0])
+#
+# Simplex(A, b, c)
 
 """As seen above, the function ``Simplex`` outputs the correct values.  ``Simplex`` returns more information than necessary (it does not just return the solution), but it can be useful to see the final values of all the key matrices it uses in the algorithm, so we may gain an intuition into what is going on."""
+
+if __name__ == '__main__':
+    simplex_launcher()
+    qq = 0
